@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
+// import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DataRewardsToken is Ownable {
@@ -8,7 +9,7 @@ contract DataRewardsToken is Ownable {
     // a list of pending registrations
     mapping(address => bool) public pendingRegistrations;
 
-    event NewRegistration(string phrase);
+    event NewRegistration(address wallet, string phrase);
     event RegistrationSuccess(address wallet);
     event RegistrationFailure(address wallet);
 
@@ -16,7 +17,7 @@ contract DataRewardsToken is Ownable {
     function register(string calldata phrase) public {
         require(!pendingRegistrations[msg.sender], "Already pending");
         pendingRegistrations[msg.sender] = true;
-        emit NewRegistration(phrase);
+        emit NewRegistration(msg.sender, phrase);
     }
 
     // called by oracle when the product is registered
