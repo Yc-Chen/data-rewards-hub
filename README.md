@@ -42,6 +42,25 @@ await contract.postRegistrationSuccess(addr1.address, 2)
 
 TODO, write this into test
 
+## Nue JS
+
+Note that `"type": "module"` is required in `package.json` for `import` to work.
+But will it break something else?
+
+Nue js has received pretty bad comments on hacker news.
+Decided not to use it.
+
 ## Next step
 
 Make a UI that users can register product and see if they have a product.
+
+- [x] connect to the local blockchain
+- [ ] change to another framework. vue? htmx?
+- [ ] build admin UI to 'airdrop' tokens
+
+Snippet on how to use ether.js to get past events:
+https://github.com/ethers-io/ethers.js/issues/37
+
+Refactor the contract to emit events only. Also make it inherit from ERC721.
+
+Rename 'data rewards' to 'data contribution'
