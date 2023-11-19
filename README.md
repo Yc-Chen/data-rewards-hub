@@ -55,7 +55,8 @@ Decided not to use it.
 Make a UI that users can register product and see if they have a product.
 
 - [x] connect to the local blockchain
-- [ ] change to another framework. vue? htmx?
+- [x] change to another framework. vue? htmx?
+- [x] add shoelace
 - [ ] build admin UI to 'airdrop' tokens
 
 Snippet on how to use ether.js to get past events:
