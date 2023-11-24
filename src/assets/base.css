@@ -34,6 +34,10 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --size-1: 4px;
+  --size-2: 8px;
+  --size-3: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
