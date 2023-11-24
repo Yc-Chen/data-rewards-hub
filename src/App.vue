@@ -1,13 +1,41 @@
 <script setup>
-import { onMounted } from 'vue';
-import { ethers } from 'ethers';
+import { onMounted, ref } from 'vue';
+import * as ethers from 'ethers';
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
 
+const CONTRACT_OWNER = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+
+const isContractOwner = ref(false);
+
 onMounted(async () => {
-  console.log('mounted!')
-  await connectToMetaMask()
+  const {provider, signer, address} = await connectToMetaMask();
+  
+  window.ethereum.on('accountsChanged', async (accounts) => {
+    console.log('Account changed:', accounts[0]);
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    updateApp(address);
+  });
+  window.ethereum.on('chainChanged', async (chainId) => {
+    console.log('Chain changed:', chainId);
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    updateApp(address);
+  });
+
+  updateApp(address);
 })
+
+function updateApp(address) {
+  if (address === CONTRACT_OWNER) {
+    isContractOwner.value = true
+    console.log('You are the contract owner!');
+  } else {
+    isContractOwner.value = false
+    console.log('You are not the contract owner.');
+  }
+}
 
 // Connect to MetaMask (assuming MetaMask is installed and active)
 async function connectToMetaMask() {
@@ -17,10 +45,10 @@ async function connectToMetaMask() {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
 
     // Create an ethers.js provider using MetaMask
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.BrowserProvider(window.ethereum);
 
     // Get the signer (account) from the provider
-    const signer = provider.getSigner();
+    const signer = await provider.getSigner();
 
     // Get the connected address
     const address = await signer.getAddress();
@@ -45,6 +73,13 @@ async function connectToMetaMask() {
   </header>
 
   <main>
+    <div v-if="isContractOwner">
+      <h2>Contract Owner</h2>
+      <p>You are the contract owner.</p>
+    </div>
+
+    <div v-else></div>
+
     <sl-button>Click me</sl-button>
   </main>
 </template>

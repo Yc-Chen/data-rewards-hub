@@ -62,6 +62,10 @@ Make a UI that users can register product and see if they have a product.
 Snippet on how to use ether.js to get past events:
 https://github.com/ethers-io/ethers.js/issues/37
 
+Note: etherjs has upgraded to v6.
+Docs:
+https://docs.ethers.org/v6/search/?search=getsigner
+
 Refactor the contract to emit events only. Also make it inherit from ERC721.
 
 Rename 'data rewards' to 'data contribution'
