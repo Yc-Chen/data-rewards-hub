@@ -1,11 +1,37 @@
 <script setup>
 import { onMounted } from 'vue';
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ethers } from 'ethers';
+// import HelloWorld from './components/HelloWorld.vue'
+// import TheWelcome from './components/TheWelcome.vue'
 
-onMounted(() => {
+onMounted(async () => {
   console.log('mounted!')
+  await connectToMetaMask()
 })
+
+// Connect to MetaMask (assuming MetaMask is installed and active)
+async function connectToMetaMask() {
+  // Check if MetaMask is installed
+  if (typeof window.ethereum !== 'undefined') {
+    // Request account access if needed
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    // Create an ethers.js provider using MetaMask
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    // Get the signer (account) from the provider
+    const signer = provider.getSigner();
+
+    // Get the connected address
+    const address = await signer.getAddress();
+    console.log('Connected to MetaMask with address:', address);
+
+    return { provider, signer, address };
+  } else {
+    console.error('MetaMask not found. Please install MetaMask and try again.');
+    return null;
+  }
+}
 </script>
 
 <template>
