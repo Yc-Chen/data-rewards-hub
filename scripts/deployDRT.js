@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const contract = await hre.ethers.deployContract("DataRewardsToken");
+  const contract = await hre.ethers.deployContract("DataRewardsToken", ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"]);
 
   await contract.waitForDeployment();
 
@@ -9,19 +9,19 @@ async function main() {
     `DRT with deployed to ${contract.target}`
   );
 
-  const eventPromise = new Promise((resolve) => {
-    listener = resolve;
-    return contract.on("NewRegistration", async (wallet, phrase) => {
-      console.log('NewRegistration', wallet, phrase)
-      if (phrase && phrase.toLowerCase().startsWith('wow!')) {
-        await contract.postRegistrationSuccess(wallet, 1)
-        resolve()
-      } else {
-        await contract.postRegistrationFailure(wallet)
-        resolve()
-      }
-    })
-  });
+  // const eventPromise = new Promise((resolve) => {
+  //   listener = resolve;
+  //   return contract.on("NewRegistration", async (wallet, phrase) => {
+  //     console.log('NewRegistration', wallet, phrase)
+  //     if (phrase && phrase.toLowerCase().startsWith('wow!')) {
+  //       await contract.postRegistrationSuccess(wallet, 1)
+  //       resolve()
+  //     } else {
+  //       await contract.postRegistrationFailure(wallet)
+  //       resolve()
+  //     }
+  //   })
+  // });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
