@@ -1,28 +1,20 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import * as ethers from 'ethers';
+import { connectToMetaMask, listenForAccountChange, listenForChainChange } from './utils/wallet';
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
 
 const CONTRACT_OWNER = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 
+const isLoading = ref(true);
 const isContractOwner = ref(false);
 
 onMounted(async () => {
   const {provider, signer, address} = await connectToMetaMask();
-  
-  window.ethereum.on('accountsChanged', async (accounts) => {
-    console.log('Account changed:', accounts[0]);
-    const signer = await provider.getSigner();
-    const address = await signer.getAddress();
-    updateApp(address);
-  });
-  window.ethereum.on('chainChanged', async (chainId) => {
-    console.log('Chain changed:', chainId);
-    const signer = await provider.getSigner();
-    const address = await signer.getAddress();
-    updateApp(address);
-  });
+  isLoading.value = false;
+
+  listenForAccountChange(updateApp);
+  listenForChainChange(updateApp);
 
   updateApp(address);
 })
@@ -37,28 +29,20 @@ function updateApp(address) {
   }
 }
 
-// Connect to MetaMask (assuming MetaMask is installed and active)
-async function connectToMetaMask() {
-  // Check if MetaMask is installed
-  if (typeof window.ethereum !== 'undefined') {
-    // Request account access if needed
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
+function openDialog() {
+  const dialog = document.querySelector('.dialog-overview');
+  dialog.show();
+}
 
-    // Create an ethers.js provider using MetaMask
-    const provider = new ethers.BrowserProvider(window.ethereum);
+function closeDialog() {
+  const dialog = document.querySelector('.dialog-overview');
+  dialog.hide();
+}
 
-    // Get the signer (account) from the provider
-    const signer = await provider.getSigner();
-
-    // Get the connected address
-    const address = await signer.getAddress();
-    console.log('Connected to MetaMask with address:', address);
-
-    return { provider, signer, address };
-  } else {
-    console.error('MetaMask not found. Please install MetaMask and try again.');
-    return null;
-  }
+function send() {
+  const destination = ''
+  const amount = 10
+  console.log(`Sending ${amount} to ${destination}`);
 }
 </script>
 
@@ -73,14 +57,44 @@ async function connectToMetaMask() {
   </header>
 
   <main>
-    <div v-if="isContractOwner">
-      <h2>Contract Owner</h2>
-      <p>You are the contract owner.</p>
+    <div v-if="isLoading">
+      <sl-spinner></sl-spinner>
     </div>
+    <div v-else>
+      <div v-if="isContractOwner">
+        <h2>Contract Owner</h2>
+        <p>You are the contract owner.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0x1234</td>
+              <td>0.0001</td>
+            </tr>
+          </tbody>
+        </table>
+        <sl-dialog label="Give rewards" class="dialog-overview">
+          <sl-input label="To" placeholder="Please fill in the account to receive rewards"></sl-input>
+          <sl-input label="Amount" placeholder="Please fill in the amount of rewards" type="number"></sl-input>
+          <sl-button variant="primary" @click="send">Send</sl-button>
+          <sl-button slot="footer" @click="closeDialog">Close</sl-button>
+        </sl-dialog>
 
-    <div v-else></div>
+        <sl-button variant="primary" @click="openDialog">Give rewards</sl-button>
+        <h3>Newly Claimed Rewards</h3>
+        <ul>
+          
+        </ul>
+      </div>
 
-    <sl-button>Click me</sl-button>
+      <div v-else></div>
+
+    </div>
   </main>
 </template>
 
@@ -101,5 +115,7 @@ header {
 
 main {
   padding: var(--size-3);
+  max-width: 1000px;
+  margin: auto;
 }
 </style>
