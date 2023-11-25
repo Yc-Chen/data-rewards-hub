@@ -55,6 +55,7 @@ Make a UI that users can register product and see if they have a product.
 - [x] change to another framework. vue? htmx?
 - [x] add shoelace
 - [ ] build admin UI to 'airdrop' tokens
+    - [ ] figure out how to call contract methods
 
 Snippet on how to use ether.js to get past events:
 https://github.com/ethers-io/ethers.js/issues/37
