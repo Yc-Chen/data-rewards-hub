@@ -53,6 +53,8 @@ Add NFT (Because MetaMask cannot discover NFT!!):
 - Contract Address: the deployed contract address
 - The `tokenId` of the NFT
 
+After restarting the blockchain, reset account activities in MetaMask!
+
 ## Next step
 
 Make a UI that users can register product and see if they have a product.
