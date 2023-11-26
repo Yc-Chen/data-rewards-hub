@@ -55,7 +55,8 @@ Make a UI that users can register product and see if they have a product.
 - [x] change to another framework. vue? htmx?
 - [x] add shoelace
 - [ ] build admin UI to 'airdrop' tokens
-    - [ ] figure out how to call contract methods
+    - [x] figure out how to call contract methods
+    - [ ] `awardNFT` is called, but where does the NFT go?
     - [ ] awardNFT to giveNFT
 
 Snippet on how to use ether.js to get past events:
@@ -68,3 +69,8 @@ https://docs.ethers.org/v6/search/?search=getsigner
 Refactor the contract to emit events only. Also make it inherit from ERC721.
 
 Rename 'data rewards' to 'data contribution'
+
+## Discussions
+
+- Is it better to reset the network or to redeploy the contract?
+  Better redeploy the contract. Otherwise you also need to reset the metamask wallet activity.

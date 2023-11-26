@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "blockchain": "npx hardhat node"
+    "blockchain": "npx hardhat node",
+    "blockchain:clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run --network localhost scripts/deployDRT.js"
   },
   "author": "",
   "license": "ISC",
