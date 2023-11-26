@@ -39,13 +39,19 @@ await contract.postRegistrationSuccess(addr1.address, 2)
 
 TODO, write this into test
 
-## Nue JS
+## MetaMask
 
-Note that `"type": "module"` is required in `package.json` for `import` to work.
-But will it break something else?
+Add network:
 
-Nue js has received pretty bad comments on hacker news.
-Decided not to use it.
+- Network Name: Local
+- New RPC URL: http://localhost:8545
+- Chain ID: 31337
+- Currency Symbol: GO (although hardhat believes its 'ETH')
+
+Add NFT (Because MetaMask cannot discover NFT!!):
+
+- Contract Address: the deployed contract address
+- The `tokenId` of the NFT
 
 ## Next step
 
@@ -56,7 +62,8 @@ Make a UI that users can register product and see if they have a product.
 - [x] add shoelace
 - [ ] build admin UI to 'airdrop' tokens
     - [x] figure out how to call contract methods
-    - [ ] `awardNFT` is called, but where does the NFT go?
+    - [x] `awardNFT` is called, but where does the NFT go?
+    - [ ] add a dialog to switch contract address
     - [ ] awardNFT to giveNFT
 
 Snippet on how to use ether.js to get past events:
@@ -74,3 +81,6 @@ Rename 'data rewards' to 'data contribution'
 
 - Is it better to reset the network or to redeploy the contract?
   Better redeploy the contract. Otherwise you also need to reset the metamask wallet activity.
+
+- Why I cannot send transaction in Metamask?
+  Likely because of chainId issue: https://hardhat.org/hardhat-network/docs/metamask-issue.A workaround is to set chainId to 1337 in hardhat.
