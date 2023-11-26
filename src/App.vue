@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { connectToMetaMask, listenForAccountChange, listenForChainChange } from './utils/wallet';
+import { connectToMetaMask, listenForAccountChange, listenForChainChange, awardNFT } from './utils/wallet';
+
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
 
@@ -9,8 +10,11 @@ const CONTRACT_OWNER = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 const isLoading = ref(true);
 const isContractOwner = ref(false);
 
+let signer;
+
 onMounted(async () => {
-  const {provider, signer, address} = await connectToMetaMask();
+  const { provider, signer: sig, address } = await connectToMetaMask();
+  signer = sig;
   isLoading.value = false;
 
   listenForAccountChange(updateApp);
@@ -39,10 +43,10 @@ function closeDialog() {
   dialog.hide();
 }
 
-function send() {
-  const destination = ''
-  const amount = 10
-  console.log(`Sending ${amount} to ${destination}`);
+function giveNFT() {
+  const destination = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
+  awardNFT(signer, destination);
+  console.log(`Sending DRT to ${destination}`);
 }
 </script>
 
@@ -80,15 +84,14 @@ function send() {
         </table>
         <sl-dialog label="Give rewards" class="dialog-overview">
           <sl-input label="To" placeholder="Please fill in the account to receive rewards"></sl-input>
-          <sl-input label="Amount" placeholder="Please fill in the amount of rewards" type="number"></sl-input>
-          <sl-button variant="primary" @click="send">Send</sl-button>
+          <sl-button variant="primary" @click="giveNFT">Send</sl-button>
           <sl-button slot="footer" @click="closeDialog">Close</sl-button>
         </sl-dialog>
 
         <sl-button variant="primary" @click="openDialog">Give rewards</sl-button>
         <h3>Newly Claimed Rewards</h3>
         <ul>
-          
+
         </ul>
       </div>
 

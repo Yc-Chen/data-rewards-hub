@@ -56,6 +56,7 @@ Make a UI that users can register product and see if they have a product.
 - [x] add shoelace
 - [ ] build admin UI to 'airdrop' tokens
     - [ ] figure out how to call contract methods
+    - [ ] awardNFT to giveNFT
 
 Snippet on how to use ether.js to get past events:
 https://github.com/ethers-io/ethers.js/issues/37

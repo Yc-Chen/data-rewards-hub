@@ -1,14 +1,23 @@
 import * as ethers from 'ethers';
+import { abi } from '@/assets/DataRewardsToken.json';
+
+const CHAIN_ID = '31337n';
+const CONTRACT_ADDRESS = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
 
 // Connect to MetaMask (assuming MetaMask is installed and active)
+// TODO: clean this up. CHAIN_ID check. and maybe owner check.
 export async function connectToMetaMask() {
   // Check if MetaMask is installed
   if (typeof window.ethereum !== 'undefined') {
     // Request account access if needed
     await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-    // Create an ethers.js provider using MetaMask
     const provider = new ethers.BrowserProvider(window.ethereum);
+
+    const network = await provider.getNetwork();
+    if (network.chainId !== CHAIN_ID) {
+      console.log('Please switch to Hardhat testnet');
+    }
 
     // Get the signer (account) from the provider
     const signer = await provider.getSigner();
@@ -36,4 +45,14 @@ export function listenForChainChange(provider, onChainChange) {
   window.ethereum.on('chainChanged', (chainId) => {
     onChainChange(chainId);
   });
+}
+
+export async function awardNFT(signer, to) {
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
+  const transaction = await contract.awardNFT(to);
+  const receipt = await transaction.wait();
+  console.log('Transaction receipt:', receipt);
+  if (receipt.status === 0) {
+    throw new Error('Transaction failed');
+  }
 }
