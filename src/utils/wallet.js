@@ -63,3 +63,10 @@ export async function getUsers(signer) {
   const users = await contract.getUsers();
   return users;
 }
+
+export function sendETH(signer, to) {
+  signer.sendTransaction({
+    to,
+    value: ethers.parseEther('1.0'),
+  });
+}

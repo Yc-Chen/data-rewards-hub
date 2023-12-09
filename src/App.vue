@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { connectToMetaMask, listenForAccountChange, listenForChainChange, awardNFT, getUsers } from './utils/wallet';
+import { connectToMetaMask, listenForAccountChange, listenForChainChange, awardNFT, getUsers, sendETH } from './utils/wallet';
 
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
@@ -57,6 +57,12 @@ function giveNFT() {
   awardNFT(signer, target.value);
   console.log(`Sending DRT to ${target.value}`);
 }
+
+function giveRewardsAll() {
+  users.value.forEach(u => {
+    sendETH(signer, u)
+  })
+}
 </script>
 
 <template>
@@ -111,12 +117,11 @@ function giveNFT() {
         </sl-dialog>
 
         <sl-button variant="primary" @click="openDialog">Give Token</sl-button>
-        <sl-button variant="default" @click="getNFTOwners">Get Users</sl-button>
-        <h3>Newly Claimed Rewards</h3>
-        <sl-button variant="primary">Give Rewards</sl-button>
+        <h3>Accounts owning DRT</h3>
         <ul>
           <li v-for="user in users" :key="user">{{ user }}</li>
         </ul>
+        <sl-button variant="primary" @click="giveRewardsAll">Give Rewards</sl-button>
       </div>
 
       <div v-else></div>
