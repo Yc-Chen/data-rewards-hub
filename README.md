@@ -59,15 +59,8 @@ After restarting the blockchain, reset account activities in MetaMask!
 
 Make a UI that users can register product and see if they have a product.
 
-- [x] connect to the local blockchain
-- [x] change to another framework. vue? htmx?
-- [x] add shoelace
-- [ ] build admin UI to 'airdrop' tokens
-    - [x] figure out how to call contract methods
-    - [x] `awardNFT` is called, but where does the NFT go?
-    - [ ] add UI and update contract to show list of NFT owners.
-    - [ ] add a dialog to switch contract address
-    - [ ] awardNFT to giveNFT
+It turned out not possible to send multiple transactions in one go.
+What to do?
 
 Snippet on how to use ether.js to get past events:
 https://github.com/ethers-io/ethers.js/issues/37
