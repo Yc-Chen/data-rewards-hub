@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { connectToMetaMask, listenForAccountChange, listenForChainChange, awardNFT } from './utils/wallet';
+import { connectToMetaMask, listenForAccountChange, listenForChainChange, awardNFT, getUsers } from './utils/wallet';
 
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
@@ -9,9 +9,9 @@ const CONTRACT_OWNER = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 
 const isLoading = ref(true);
 const isContractOwner = ref(false);
+const users = ref([])
 
 let signer;
-
 onMounted(async () => {
   const { provider, signer: sig, address } = await connectToMetaMask();
   signer = sig;
@@ -23,14 +23,23 @@ onMounted(async () => {
   updateApp(address);
 })
 
-function updateApp(address) {
+async function updateApp(address) {
   if (address === CONTRACT_OWNER) {
     isContractOwner.value = true
     console.log('You are the contract owner!');
+
+    const received = await getUsers(signer)
+    users.value.splice(0, users.value.length)
+    users.value.splice(0, 0, ...received.filter(u => u !== '0x0000000000000000000000000000000000000000'))
+    console.log('Users are', users)
   } else {
     isContractOwner.value = false
     console.log('You are not the contract owner.');
   }
+}
+
+function switchAccount() {
+  window.ethereum.request({ method: 'eth_requestAccounts' });
 }
 
 function openDialog() {
@@ -43,10 +52,10 @@ function closeDialog() {
   dialog.hide();
 }
 
+const target = ref('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
 function giveNFT() {
-  const destination = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
-  awardNFT(signer, destination);
-  console.log(`Sending DRT to ${destination}`);
+  awardNFT(signer, target.value);
+  console.log(`Sending DRT to ${target.value}`);
 }
 </script>
 
@@ -56,7 +65,10 @@ function giveNFT() {
       <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="40" height="40" />
       <h1>Data Rewards Hub</h1>
       <div style="flex-grow: 1"></div>
-      <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
+      <sl-button variant="default">
+        <sl-icon slot="prefix" name="person-circle"></sl-icon>
+        Switch Account
+      </sl-button>
     </div>
   </header>
 
@@ -83,15 +95,27 @@ function giveNFT() {
           </tbody>
         </table>
         <sl-dialog label="Give rewards" class="dialog-overview">
-          <sl-input label="To" placeholder="Please fill in the account to receive rewards"></sl-input>
+          <sl-input label="To" placeholder="Please fill in the account to receive rewards" v-model="target"></sl-input>
+          <p>Other wallets are for example:</p>
+          <ul>
+            <li>0x90F79bf6EB2c4f870365E785982E1f101E93b906</li>
+            <li>0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65</li>
+            <li>0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc</li>
+            <li>0x976EA74026E726554dB657fA54763abd0C3a0aa9</li>
+            <li>0x14dC79964da2C08b23698B3D3cc7Ca32193d9955</li>
+            <li>0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f</li>
+            <li>0xa0Ee7A142d267C1f36714E4a8F75612F20a79720</li>
+          </ul>
           <sl-button variant="primary" @click="giveNFT">Send</sl-button>
           <sl-button slot="footer" @click="closeDialog">Close</sl-button>
         </sl-dialog>
 
-        <sl-button variant="primary" @click="openDialog">Give rewards</sl-button>
+        <sl-button variant="primary" @click="openDialog">Give Token</sl-button>
+        <sl-button variant="default" @click="getNFTOwners">Get Users</sl-button>
         <h3>Newly Claimed Rewards</h3>
+        <sl-button variant="primary">Give Rewards</sl-button>
         <ul>
-
+          <li v-for="user in users" :key="user">{{ user }}</li>
         </ul>
       </div>
 

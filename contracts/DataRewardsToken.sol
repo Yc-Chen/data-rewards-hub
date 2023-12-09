@@ -15,8 +15,9 @@ contract DataRewardsToken is ERC721, Ownable {
     event NewRegistration(address wallet, string phrase);
     event RegistrationSuccess(address wallet);
     event RegistrationFailure(address wallet);
-
-    uint256 private _nextTokenId;
+    
+    address[256] private users;
+    uint8 private _nextTokenId;
 
     constructor(address initialOwner)
         ERC721("DataRewardsToken", "DRT")
@@ -27,11 +28,15 @@ contract DataRewardsToken is ERC721, Ownable {
         public onlyOwner
         returns (uint256)
     {
-        uint256 tokenId = _nextTokenId++;
+        uint8 tokenId = _nextTokenId++;
         console.log("Minting token %s for %s", tokenId, user);
         _mint(user, tokenId);
-
+        users[tokenId] = user;
         return tokenId;
+    }
+
+    function getUsers () public onlyOwner view returns (address[256] memory) {
+        return users;
     }
 
     // called when user signs up after buying the physical product

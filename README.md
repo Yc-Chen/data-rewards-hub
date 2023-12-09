@@ -1,4 +1,4 @@
-# Sample Hardhat Project
+# Data Rewards Hub
 
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
 
@@ -65,6 +65,7 @@ Make a UI that users can register product and see if they have a product.
 - [ ] build admin UI to 'airdrop' tokens
     - [x] figure out how to call contract methods
     - [x] `awardNFT` is called, but where does the NFT go?
+    - [ ] add UI and update contract to show list of NFT owners.
     - [ ] add a dialog to switch contract address
     - [ ] awardNFT to giveNFT
 

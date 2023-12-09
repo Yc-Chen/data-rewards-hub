@@ -2,7 +2,8 @@ import * as ethers from 'ethers';
 import { abi } from '@/assets/DataRewardsToken.json';
 
 const CHAIN_ID = '31337n';
-const CONTRACT_ADDRESS = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
+const CONTRACT_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+// const CONTRACT_ADDRESS = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 // Connect to MetaMask (assuming MetaMask is installed and active)
 // TODO: clean this up. CHAIN_ID check. and maybe owner check.
@@ -55,4 +56,10 @@ export async function awardNFT(signer, to) {
   if (receipt.status === 0) {
     throw new Error('Transaction failed');
   }
+}
+
+export async function getUsers(signer) {
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
+  const users = await contract.getUsers();
+  return users;
 }
