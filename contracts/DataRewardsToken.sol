@@ -24,11 +24,10 @@ contract DataRewardsToken is ERC721, Ownable {
         Ownable(initialOwner)
     {}
 
-    function awardNFT(address user)
+    function awardNFT(address user, uint8 tokenId)
         public onlyOwner
         returns (uint256)
     {
-        uint8 tokenId = _nextTokenId++;
         console.log("Minting token %s for %s", tokenId, user);
         _mint(user, tokenId);
         users[tokenId] = user;

@@ -12,7 +12,7 @@
     "blockchain": "npx hardhat node",
     "blockchain:clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run --network localhost scripts/deployDRT.js"
+    "deploy": "npx hardhat run --network localhost scripts/deployDRT.js && cp artifacts/contracts/**/*.json src/assets/"
   },
   "author": "",
   "license": "ISC",
