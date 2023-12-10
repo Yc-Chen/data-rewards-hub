@@ -24,15 +24,19 @@ onMounted(async () => {
   updateApp(address);
 })
 
+async function updateUsers() {
+  const received = await getUsers(signer)
+  users.value.splice(0, users.value.length, ...received)
+  tokenId.value = users.value.findIndex(u => u === '0x0000000000000000000000000000000000000000')
+  console.log('Users are', users)
+}
+
 async function updateApp(address) {
   if (address === CONTRACT_OWNER) {
     isContractOwner.value = true
     console.log('You are the contract owner!');
 
-    const received = await getUsers(signer)
-    users.value.splice(0, users.value.length, ...received)
-    tokenId.value = users.value.findIndex(u => u === '0x0000000000000000000000000000000000000000')
-    console.log('Users are', users)
+    await updateUsers()
   } else {
     isContractOwner.value = false
     console.log('You are not the contract owner.');
@@ -55,15 +59,10 @@ function closeDialog() {
 
 const target = ref('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
 const tokenId = ref('1');
-function giveNFT() {
-  awardNFT(signer, target.value, tokenId.value);
+async function giveNFT() {
+  await awardNFT(signer, target.value, tokenId.value);
   console.log(`Sending DRT to ${target.value}`);
-}
-
-function giveRewardsAll() {
-  users.value.forEach(u => {
-    sendETH(signer, u)
-  })
+  updateUsers()
 }
 </script>
 
