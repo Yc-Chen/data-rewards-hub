@@ -1,82 +1,29 @@
 # Data Rewards Hub
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+> If you are not paying for the product, then you are the product.
 
-Try running some of the following tasks:
+How about we change that?
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-```
+This repo demonstrate a concept where users can get an NFT for their 'data' contribution
+and in return get rewards through other crypto assets, including stable coins.
+It features a simple ERC721 contract that is used for recognizing users.
 
-hardhat:
+It can be an online service or a physical product.
+The idea is that users can register their product and get an NFT.
+The NFT can be transacted in the market and the owner can get rewards.
 
-```sh
-npx hardhat compile
+## Steps
 
-npx hardhat run --network localhost scripts/deployDRT.js
-```
+1. `npm install`. (Developed with Node v18)
+2. `npm run blockchain`. This will start a hardhat local node
+3. Add the local blockchain and import the first account into MetaMask:
+    - Network Name: Local
+    - New RPC URL: http://localhost:8545
+    - Chain ID: 31337
+    - Currency Symbol: GO (although hardhat believes its 'ETH')
+    - Import account: 0x5FbDB2315678afecb367f032d93F642f64180aa3 (This is usually the first account in hardhat local network).
+4. `npm run compile && npm run deploy`. This will compile the NFT contract and deploy it. (Note, do not deploy twice!)
+5. `npm run dev`. This will start a local dashbaord
 
-To interact with the contract: `npx hardhat console --network localhost`
-
-```JavaScript
-const Contract = await ethers.getContractFactory('DataRewardsToken');
-contract = await Contract.attach('0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1')
-await contract.register('My first product') // this will not register
-await contract.register('Wow! My first product') // this will register
-
-// connect from a different account
-const [owner, addr1] = await ethers.getSigners()
-await contract.connect(addr1).register('My second product')
-await contract.connect(addr1).isPending()
-
-// as oracle
-await contract.postRegistrationFailure(owner.address)
-await contract.postRegistrationSuccess(addr1.address, 2) 
-```
-
-TODO, write this into test
-
-## MetaMask
-
-Add network:
-
-- Network Name: Local
-- New RPC URL: http://localhost:8545
-- Chain ID: 31337
-- Currency Symbol: GO (although hardhat believes its 'ETH')
-
-Add NFT (Because MetaMask cannot discover NFT!!):
-
-- Contract Address: the deployed contract address
-- The `tokenId` of the NFT
-
-After restarting the blockchain, reset account activities in MetaMask!
-
-## Next step
-
-Make a UI that users can register product and see if they have a product.
-
-It turned out not possible to send multiple transactions in one go.
-What to do?
-
-Snippet on how to use ether.js to get past events:
-https://github.com/ethers-io/ethers.js/issues/37
-
-Note: etherjs has upgraded to v6.
-Docs:
-https://docs.ethers.org/v6/search/?search=getsigner
-
-Refactor the contract to emit events only. Also make it inherit from ERC721.
-
-Rename 'data rewards' to 'data contribution'
-
-## Discussions
-
-- Is it better to reset the network or to redeploy the contract?
-  Better redeploy the contract. Otherwise you also need to reset the metamask wallet activity.
-
-- Why I cannot send transaction in Metamask?
-  Likely because of chainId issue: https://hardhat.org/hardhat-network/docs/metamask-issue.A workaround is to set chainId to 1337 in hardhat.
+> [!NOTE]  
+> If you ever restart the blockchain, you will need to reset the account activities in MetaMask!
