@@ -6,7 +6,7 @@
 
 ---
 
-<p align="center" style="font-size:1.5em">💡How about we align that?</p>
+<h2><p align="center">💡How about we align that?💡</p></h2>
 
 ---
 
